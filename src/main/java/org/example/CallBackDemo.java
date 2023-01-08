@@ -11,9 +11,20 @@ public class CallBackDemo {
             public void run() {
                 try {
                     new CallBackDemo().runningAsync(new CallBack() {
+
                         @Override
-                        public void call() {
-                            System.out.println("Call Back Called !!");
+                        public void pushData(String data) {
+                            System.out.println("Callaback data:"+data);
+                        }
+
+                        @Override
+                        public void pushComplete() {
+                            System.out.println("Callback push complete");
+                        }
+
+                        @Override
+                        public void pushError(Exception ex) {
+                            System.out.println("Got an exceptions : "+ex);
                         }
                     });
                 } catch (InterruptedException e) {
@@ -36,7 +47,11 @@ public class CallBackDemo {
     public void runningAsync(CallBack callBack) throws InterruptedException {
         System.out.println("Hello world! , I am a different Thread in running");
         sleep(1000);
-        callBack.call();
+        callBack.pushData("Data1");
+        callBack.pushData("Data2");
+        callBack.pushData("Data3");
+        callBack.pushError(new RuntimeException("Oops error "));
+        callBack.pushComplete();
 
     }
 
